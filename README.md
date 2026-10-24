@@ -1,17 +1,16 @@
-# Hotel Facility Booking
+# Hotel Facility Booking System
 
-A simple PHP + MySQL system for booking hotel facilities (pool, gym, spa, meeting room) by time slot.
-Users register, view slots, and reserve. Admins manage reservations, users and slots.
+A PHP (OOP + includes) and MySQL website for browsing and booking hotel facilities by time slot.
 
 ## Technologies
-PHP (PDO, sessions), MySQL, HTML, CSS, Chart.js (CDN).
+PHP 8 (PDO, sessions, classes), MySQL, HTML, CSS, Chart.js (CDN).
 
-## Installation
-1. Install WAMP and start Apache + MySQL.
-2. Copy this folder to `www/Hotel_Facility_Booking_System`.
-3. Import `schema.sql` in phpMyAdmin (it creates the `hotel_booking` database and sample data).
-4. If your MySQL has a password or the folder name differs, edit `includes/config.php` (`BASE` and the PDO line).
-5. Open http://localhost/Hotel_Facility_Booking_System
+## Installation (WAMP)
+1. Copy this folder to `C:\wamp64\www\Hotel_Facility_Booking_System`.
+2. Start WAMP, open `http://localhost/phpmyadmin`.
+3. Go to the **Import** tab, choose `schema.sql`, click **Import** (it creates the `hotel_booking` database with sample data).
+4. Open `http://localhost/Hotel_Facility_Booking_System`.
+5. If MySQL has a password or the folder name differs, edit `includes/config.php`.
 
 ## Demo accounts
 | Role  | Email           | Password |
@@ -19,14 +18,20 @@ PHP (PDO, sessions), MySQL, HTML, CSS, Chart.js (CDN).
 | Admin | admin@hotel.com | admin123 |
 | User  | user@hotel.com  | user123  |
 
-## Business rules (enforced on the server)
+## Structure
+```
+index.php        Home page
+classes/         Database, Model, Auth, User, Facility, TimeSlot, Reservation
+includes/        config, helpers, autoload, header, footer, shared pieces
+pages/           public + user pages
+admin/           admin dashboard and management pages
+assets/          css/ and images/ (replace the placeholder .svg with your own photos)
+schema.sql       database
+```
+
+## Business rules (enforced in the classes)
 - No reservations in the past, no duplicates, capacity is respected.
 - Cancelled/rejected reservations free their place.
 - Slots with pending/confirmed reservations cannot be deleted.
 - Only admins confirm/reject; users cancel only their own reservations.
 - Deactivated accounts cannot log in.
-
-## Manual test checklist
-Register/login · invalid inputs · user opening /admin gets 403 · cancel another user's reservation fails ·
-past slot rejected · duplicate rejected · full slot rejected · status change visible to user ·
-deactivated user blocked · slot with active reservation cannot be deleted.

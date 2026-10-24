@@ -1,34 +1,29 @@
 <?php
-require '../includes/config.php';
+require_once __DIR__ . '/../includes/config.php';
 
 $error = '';
+$next  = safeNext($_POST['next'] ?? $_GET['next'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email    = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $auth  = new Auth();
+    $error = $auth->login(trim($_POST['email'] ?? ''), $_POST['password'] ?? '');
 
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    $found = $stmt->fetch();
-
-    if (!$found || !password_verify($password, $found['password'])) {
-        $error = 'Wrong email or password.';
-    } elseif (!$found['is_active']) {
-        $error = 'Your account is deactivated.';
-    } else {
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $found['id'];
-        redirect($found['role'] === 'admin' ? '../admin/index.php' : '../index.php');
+    if (!$error) {
+        // Back to the page the visitor came from, otherwise a default page by role
+        redirect($next ?: ($auth->user()['role'] === 'admin' ? url('admin/index.php') : url('index.php')));
     }
 }
 
-require '../includes/header.php';
+$pageTitle = 'Login';
+include ROOT . '/includes/header.php';
 ?>
 <h1>Login</h1>
 <?php if ($error): ?><div class="msg error"><?= e($error) ?></div><?php endif; ?>
 <form method="post" class="card">
+    <input type="hidden" name="next" value="<?= e($next) ?>">
     <label>Email <input type="email" name="email" required></label>
     <label>Password <input type="password" name="password" required></label>
     <button>Login</button>
 </form>
-<?php require '../includes/footer.php'; ?>
+<p>No account? <a href="<?= url('pages/register.php') ?><?= $next ? '?next=' . urlencode($next) : '' ?>">Register</a></p>
+<?php include ROOT . '/includes/footer.php'; ?>

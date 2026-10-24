@@ -1,64 +1,36 @@
 <?php
-require 'includes/config.php';
+require_once __DIR__ . '/includes/config.php';
 
-$user = current_user();
+$pageTitle  = 'Home';
+$featured   = array_slice((new Facility())->all(), 0, 3);
 
-// Selected date (defaults to today)
-$date = $_GET['date'] ?? date('Y-m-d');
-$parsed = DateTime::createFromFormat('Y-m-d', $date);
-if (!$parsed || $parsed->format('Y-m-d') !== $date) {
-    $date = date('Y-m-d');
-}
-
-// Future slots of that date, with how many places are taken
-$stmt = $pdo->prepare(
-    "SELECT s.*, f.name AS facility,
-        (SELECT COUNT(*) FROM reservations r
-          WHERE r.slot_id = s.id AND r.status IN ('pending','confirmed')) AS taken,
-        (SELECT COUNT(*) FROM reservations r
-          WHERE r.slot_id = s.id AND r.user_id = ? AND r.status IN ('pending','confirmed')) AS mine
-     FROM time_slots s
-     JOIN facilities f ON f.id = s.facility_id
-     WHERE s.slot_date = ? AND TIMESTAMP(s.slot_date, s.start_time) > NOW()
-     ORDER BY s.start_time, f.name"
-);
-$stmt->execute([$user['id'] ?? 0, $date]);
-$slots = $stmt->fetchAll();
-
-require 'includes/header.php';
+include ROOT . '/includes/header.php';
 ?>
-<h1>Available Time Slots</h1>
-<form method="get" class="inline">
-    <input type="date" name="date" value="<?= e($date) ?>">
-    <button>Show</button>
-</form>
+<section class="hero">
+    <img src="<?= asset('images/hero.svg') ?>" alt="Hotel">
+    <h1>Welcome to <?= e(HOTEL_NAME) ?></h1>
+    <p>Reserve our pool, gym, spa and meeting room in a few clicks.</p>
+    <a class="button" href="<?= url('pages/facilities.php') ?>">Explore Facilities</a>
+    <a class="button" href="<?= url('pages/availability.php') ?>">Check Availability</a>
+</section>
 
-<div class="table-wrap">
-<table>
-    <tr><th>Facility</th><th>Time</th><th>Remaining</th><th>Reserve</th></tr>
-    <?php foreach ($slots as $s): $left = $s['capacity'] - $s['taken']; ?>
-    <tr>
-        <td><?= e($s['facility']) ?></td>
-        <td><?= e(substr($s['start_time'], 0, 5)) ?> - <?= e(substr($s['end_time'], 0, 5)) ?></td>
-        <td><?= $left ?> / <?= $s['capacity'] ?></td>
-        <td>
-            <?php if (!$user): ?>
-                <a href="pages/login.php">Log in to reserve</a>
-            <?php elseif ($s['mine']): ?>
-                Already reserved
-            <?php elseif ($left <= 0): ?>
-                Full
-            <?php else: ?>
-                <form method="post" action="pages/reserve.php" class="inline">
-                    <input type="hidden" name="slot_id" value="<?= $s['id'] ?>">
-                    <input type="text" name="note" placeholder="Note (optional)" maxlength="255">
-                    <button>Reserve</button>
-                </form>
-            <?php endif; ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-    <?php if (!$slots): ?><tr><td colspan="4">No available slots on this date.</td></tr><?php endif; ?>
-</table>
-</div>
-<?php require 'includes/footer.php'; ?>
+<section>
+    <h2>Our Facilities</h2>
+    <div class="grid">
+        <?php foreach ($featured as $f): ?>
+            <?php include ROOT . '/includes/facility_card.php'; ?>
+        <?php endforeach; ?>
+    </div>
+    <p><a href="<?= url('pages/facilities.php') ?>">See all facilities</a></p>
+</section>
+
+<section>
+    <h2>How to Book</h2>
+    <div class="grid steps">
+        <div><h3>1. Create an account</h3><p>Register with your name, email and password.</p></div>
+        <div><h3>2. Pick a time slot</h3><p>Choose a facility, a date and a free slot.</p></div>
+        <div><h3>3. Wait for confirmation</h3><p>Your request is Pending until the hotel confirms it.</p></div>
+    </div>
+    <p><a href="<?= url('pages/how_it_works.php') ?>">Read the full guide</a></p>
+</section>
+<?php include ROOT . '/includes/footer.php'; ?>
