@@ -17,7 +17,7 @@ CREATE TABLE facilities (
     name VARCHAR(100) NOT NULL,
     short_description VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    image VARCHAR(100) NOT NULL DEFAULT 'placeholder.svg',
+    image VARCHAR(100) NOT NULL DEFAULT 'placeholder.jpg',
     opening_hours VARCHAR(100) NOT NULL DEFAULT '',
     guidelines TEXT NULL
 );
@@ -52,22 +52,22 @@ INSERT INTO facilities (name, short_description, description, image, opening_hou
 ('Swimming Pool',
  'Heated indoor pool with a shallow area for children.',
  'Our heated indoor pool is open all year. It has swimming lanes, a shallow area for children and a relaxing seating area around it. Towels are provided at the entrance.',
- 'pool.svg', 'Daily 07:00 - 21:00',
+ 'pool.jpg', 'Daily 07:00 - 21:00',
  'Shower before entering the pool\nSwimwear is required\nChildren under 12 must be with an adult\nNo glass items or running around the pool'),
 ('Gym',
  'Fully equipped gym with cardio and strength machines.',
  'The gym has treadmills, bikes, free weights and strength machines. Water and towels are available inside. Sessions are limited to keep the space comfortable.',
- 'gym.svg', 'Daily 06:00 - 22:00',
+ 'gym.jpg', 'Daily 06:00 - 22:00',
  'Wear sports shoes and clean clothes\nWipe machines after use\nPut weights back after your session\nMinimum age is 16'),
 ('Spa',
  'Relaxing spa with massage and sauna sessions.',
  'The spa offers massage rooms, a sauna and a quiet relaxation area. Booking a slot reserves your place for the session.',
- 'spa.svg', 'Daily 10:00 - 20:00',
+ 'spa.jpg', 'Daily 10:00 - 20:00',
  'Arrive 10 minutes before your slot\nKeep your phone silent\nTell the staff about any health concerns before treatments\nMinimum age is 18'),
 ('Meeting Room',
  'Private meeting room with projector and Wi-Fi.',
  'A private meeting room for small groups, with a projector, whiteboard and fast Wi-Fi. Suitable for business meetings or study groups.',
- 'meeting-room.svg', 'Daily 08:00 - 18:00',
+ 'meeting-room.jpg', 'Daily 08:00 - 18:00',
  'Leave the room clean after use\nFood and drinks must be ordered from hotel staff\nReport any equipment problem to reception');
 
 INSERT INTO time_slots (facility_id, slot_date, start_time, end_time, capacity) VALUES

@@ -58,7 +58,7 @@ include ROOT . '/includes/header.php';
 </section>
 
 <section class="container section about-teaser">
-    <img src="<?= asset('images/hotel.svg') ?>" alt="The hotel">
+    <img src="<?= asset('images/hotel.jpg') ?>" alt="The hotel">
     <div>
         <p class="eyebrow gold">About us</p>
         <h2>A calm place to stay and unwind</h2>

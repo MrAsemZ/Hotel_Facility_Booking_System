@@ -25,7 +25,7 @@ classes/         Database, Model, Auth, User, Facility, TimeSlot, Reservation
 includes/        config, helpers, autoload, header, footer, shared pieces
 pages/           public + user pages
 admin/           admin dashboard and management pages
-assets/          css/ and images/ (replace the placeholder .svg with your own photos)
+assets/          css/ and images/ (replace the placeholder .jpg files with your own photos)
 schema.sql       database
 ```
 

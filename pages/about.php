@@ -5,7 +5,7 @@ $pageTitle = 'About Us';
 include ROOT . '/includes/header.php';
 ?>
 <h1>About Us</h1>
-<img src="<?= asset('images/hotel.svg') ?>" alt="The hotel">
+<img src="<?= asset('images/placeholder.jpg') ?>" alt="The hotel">
 
 <h2>Our Story</h2>
 <p><?= e(HOTEL_NAME) ?> is a family-run hotel that welcomes guests and visitors to enjoy comfortable

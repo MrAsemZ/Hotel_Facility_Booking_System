@@ -61,7 +61,7 @@ class Facility extends Model
             $d['name'],
             $d['short_description'],
             $d['description'],
-            $d['image'] !== '' ? $d['image'] : 'placeholder.svg',
+            $d['image'] !== '' ? $d['image'] : 'placeholder.jpg',
             $d['opening_hours'],
             $d['guidelines'],
         ];
@@ -77,7 +77,7 @@ class Facility extends Model
     public static function imageUrl(?string $file): string
     {
         if (!$file || !is_file(ROOT . '/assets/images/' . $file)) {
-            $file = 'placeholder.svg';
+            $file = 'placeholder.jpg';
         }
         return asset('images/' . $file);
     }
